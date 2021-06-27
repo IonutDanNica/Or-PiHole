@@ -1,4 +1,5 @@
-#!/bin/sh
+!/bin/bash
+
 # Packages needed for the script to work:
 #sudo apt-get install telnet nmap
 
@@ -9,6 +10,8 @@
 # - ORPI_IP
 
 COOKIE_FILE=/tmp/orbi.cookies
+SH_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+SH="$(basename $0)"
 
 #Functions start
 function log () {
@@ -17,7 +20,7 @@ function log () {
 
 function log_error_and_exit () {
   log "$1 - Exiting"
-  #exit 1
+  exit 1
 }
 
 function check_return_code () {
@@ -59,6 +62,19 @@ function change_telnet () {
 [ -z "$DNS_SERVER_WANTED" ] && log_error_and_exit "CRITICAL FAILURE: DNS_SERVER_WANTED variable not defined"
 
 log "Starting script execution"
+
+if [ $(crontab -l | grep "$SH_PATH/$SH" -c) -gt 0 ]
+then
+  log "Already added to cron"
+else
+  crontab -l | { cat; echo "0 * * * * $SH_PATH/$SH"; } | crontab -
+  log "Added script to cron"
+fi
+
+if [ $(ip addr | grep -c "inet 192.168.") -eq 0 ]
+then
+  log_error_and_exit "Host does not have valid ip"
+fi
 
 get_dns
 if [ "$DHCP_DNS" = "$DNS_SERVER_WANTED" ]
