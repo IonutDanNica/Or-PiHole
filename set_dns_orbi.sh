@@ -3,15 +3,16 @@
 # Packages needed for the script to work:
 #sudo apt-get install telnet nmap
 
-#Variables that need to be available to the script to use them directly: 
-# - DNS_SERVER_WANTED
-# - ORBI_USR
-# - ORBI_PWD
-# - ORPI_IP
+#Variables that need to be available in the conf script: 
+#DNS_SERVER_WANTED=
+#ORBI_USR=
+#ORBI_PWD=
+#ORPI_IP=
 
 COOKIE_FILE=/tmp/orbi.cookies
 SH_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 SH="$(basename $0)"
+CONF=$SH_PATH/.${SH/.sh/.conf}
 
 #Functions start
 function log () {
@@ -56,10 +57,17 @@ function change_telnet () {
 }
 #Functions end
 
-[ -z "$ORBI_USR" ] && log_error_and_exit "CRITICAL FAILURE: ORBI_USR variable not defined"
-[ -z "$ORBI_PWD" ] && log_error_and_exit "CRITICAL FAILURE: ORBI_PWD variable not defined"
-[ -z "$ORPI_IP" ] && log_error_and_exit "CRITICAL FAILURE: ORPI_IP variable not defined"
-[ -z "$DNS_SERVER_WANTED" ] && log_error_and_exit "CRITICAL FAILURE: DNS_SERVER_WANTED variable not defined"
+if [ -f $SH_PATH/$CONF ]
+then
+  source $SH_PATH/$CONF
+else
+  log_error_and_exit "CRITICAL FAILURE: Conf file $SH_PATH/$CONF does not exit."
+fi
+
+[ -z "$ORBI_USR" ] && log_error_and_exit "CRITICAL FAILURE: ORBI_USR variable not defined in conf file"
+[ -z "$ORBI_PWD" ] && log_error_and_exit "CRITICAL FAILURE: ORBI_PWD variable not defined in conf file"
+[ -z "$ORPI_IP" ] && log_error_and_exit "CRITICAL FAILURE: ORPI_IP variable not defined in conf file"
+[ -z "$DNS_SERVER_WANTED" ] && log_error_and_exit "CRITICAL FAILURE: DNS_SERVER_WANTED variable not defined in conf file"
 
 log "Starting script execution"
 
