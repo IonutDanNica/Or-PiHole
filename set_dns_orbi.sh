@@ -103,7 +103,7 @@ sleep 1
 echo "sed -i 's/option dns \(.*\))/"option dns "${DNS_SERVER_WANTED}/g' /etc/init.d/dhcpd.init"
 sleep 1
 echo '/etc/init.d/dhcpd.init reload'
-sleep 1
+sleep 7
 echo 'grep "option dns" /tmp/udhcpd.conf'
 sleep 1
 echo exit) | telnet $ORPI_IP
