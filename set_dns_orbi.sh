@@ -100,7 +100,7 @@ echo "$ORBI_USR"
 sleep 1
 echo "$ORBI_PWD"
 sleep 1
-echo "sed -i 's/"option dns "$lan_ip/"option dns "${DNS_SERVER_WANTED}/g' /etc/init.d/dhcpd.init"
+echo "sed -i 's/option dns \(.*\))/"option dns "${DNS_SERVER_WANTED}/g' /etc/init.d/dhcpd.init"
 sleep 1
 echo '/etc/init.d/dhcpd.init reload'
 sleep 1
