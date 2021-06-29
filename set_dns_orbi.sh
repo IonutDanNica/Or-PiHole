@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Packages needed for the script to work:
 #sudo apt-get install telnet nmap
