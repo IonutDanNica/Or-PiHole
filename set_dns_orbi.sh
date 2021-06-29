@@ -42,7 +42,7 @@ function get_dns () {
 
 function change_telnet () {
   log "Making login request to get ts var"
-  OUTPUT=$(wget -q  --user "$ORBI_USR" --password "$ORBI_PWD"  http://$ORPI_IP/debug_detail.htm --save-cookies=$COOKIE_FILE --keep-session-cookies -O-)
+  OUTPUT=$(wget -q --user "$ORBI_USR" --password "$ORBI_PWD"  http://$ORPI_IP/debug_detail.htm --save-cookies=$COOKIE_FILE --keep-session-cookies -O-)
   check_return_code "Something wrong in getting ts variable from ORBI. Ouptut was: $OUTPUT"
 
   ts=$(echo "$OUTPUT" | grep "^var ts" | sed 's/var ts="\(.*\)";/\1/g')
@@ -52,7 +52,7 @@ function change_telnet () {
     log_error_and_exit "ts variable is not number"
   fi
   log "Making API call and changing enable-telnet=$1"
-  OUTPUT=$(wget -q --user "$ORBI_USR" --password "$ORBI_PWD" --post-data 'ts_name=debug_info&enable-telnet=$1&rpc_name=debug-info' "http://$ORPI_IP/rpc.cgi?%20timestamp=$ts" -O-)
+  OUTPUT=$(wget -q --user "$ORBI_USR" --password "$ORBI_PWD" --post-data "ts_name=debug_info&enable-telnet=$1&rpc_name=debug-info" "http://$ORPI_IP/rpc.cgi?%20timestamp=$ts" -O-)
   check_return_code "Error while enabling telnet on ORBI"
 }
 #Functions end
