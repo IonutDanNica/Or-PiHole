@@ -57,11 +57,11 @@ function change_telnet () {
 }
 #Functions end
 
-if [ -f $SH_PATH/$CONF ]
+if [ -f $CONF ]
 then
-  source $SH_PATH/$CONF
+  source $CONF
 else
-  log_error_and_exit "CRITICAL FAILURE: Conf file $SH_PATH/$CONF does not exit."
+  log_error_and_exit "CRITICAL FAILURE: Conf file $CONF does not exit."
 fi
 
 [ -z "$ORBI_USR" ] && log_error_and_exit "CRITICAL FAILURE: ORBI_USR variable not defined in conf file"
